@@ -9,10 +9,6 @@ type NavigationView struct {
 	*graphic.Screen
 }
 
-func (n *NavigationView) Name() string {
-	return "NavigationView"
-}
-
 func (n *NavigationView) ButtonPressed(caller *graphic.Screen, x int, y int) {
 	println("Redraw NV")
 	caller.AskForRedraw(x, y)

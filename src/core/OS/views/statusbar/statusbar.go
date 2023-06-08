@@ -9,10 +9,6 @@ type StatusBar struct {
 	*graphic.Screen
 }
 
-func (s *StatusBar) Name() string {
-	return "StatusBar"
-}
-
 func (s *StatusBar) GetButtonColor(caller *graphic.Screen, x int, y int) color.RGBA {
 	return color.RGBA{R: 0, G: 0, B: 255, A: 255}
 }

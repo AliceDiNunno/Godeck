@@ -1,7 +1,6 @@
 package OS
 
 import (
-	"github.com/davecgh/go-spew/spew"
 	log "github.com/sirupsen/logrus"
 	"godeck/src/core/OS/graphic"
 	"godeck/src/core/OS/views/navigationview"
@@ -70,9 +69,6 @@ func (p *ProdeckOS) startRefreshLoop() {
 			log.WithFields(log.Fields{
 				"waitingForRedrew": len(waitingForRedrew),
 			}).Println("Refresh screen ")
-			spew.Dump(screen.ButtonsWaitingForRedraw())
-
-			//spew.Dump(screen.Layout.ButtonsWaitingForRedraw())
 
 			/*for x := 0; x < screen.Width; x++ {
 				for y := 0; y < p.screenManager.screen.Height; y++ {

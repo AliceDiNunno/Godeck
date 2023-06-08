@@ -2,7 +2,6 @@ package graphic
 
 import (
 	"errors"
-	"github.com/davecgh/go-spew/spew"
 	log "github.com/sirupsen/logrus"
 	"image/color"
 )
@@ -135,17 +134,13 @@ func (l *Layout) ButtonsWaitingForRedraw() []Point {
 	subViews := l.entries
 	for _, entry := range subViews {
 		waiting := entry.screen.ButtonsWaitingForRedraw()
-		spew.Dump("screen", entry.screen)
 		for _, point := range waiting {
-			println("point", point.X, point.Y)
 			points = append(points, Point{
 				X: point.X + entry.origin.X,
 				Y: point.Y + entry.origin.Y,
 			})
 		}
 	}
-
-	spew.Dump("subviews", points)
 
 	return points
 }

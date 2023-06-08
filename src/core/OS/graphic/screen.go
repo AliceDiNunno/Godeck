@@ -1,14 +1,14 @@
 package graphic
 
 import (
-	"github.com/davecgh/go-spew/spew"
 	"image/color"
 )
 
+// Even though the ScreenInteractor may be the same object as the Screen, it may not be the same object memory-wise so we need to pass the pointer of the Screen
+// This may be sub-optimal
 type ScreenInteractor interface {
 	GetButtonColor(caller *Screen, x int, y int) color.RGBA
 	ButtonPressed(caller *Screen, x int, y int)
-	Name() string
 }
 
 type Screen struct {
@@ -50,7 +50,6 @@ func (s *Screen) ButtonNumber(x int, y int) int {
 }
 
 func (s *Screen) AskForRedraw(x int, y int) {
-	spew.Dump(s)
 	if s.buttonsWaitingForRedraw == nil {
 		s.buttonsWaitingForRedraw = []Point{}
 	}
@@ -61,28 +60,17 @@ func (s *Screen) AskForRedraw(x int, y int) {
 		}
 	}
 	s.buttonsWaitingForRedraw = append(s.buttonsWaitingForRedraw, Point{X: x, Y: y})
-	spew.Dump(s.buttonsWaitingForRedraw)
 }
 
 func (s *Screen) ButtonsWaitingForRedraw() []Point {
-	spew.Dump(s.buttonsWaitingForRedraw)
-
-	var name = "root"
-
 	selfButtons := []Point{}
 
-	if s.Interactor != nil {
-		name = s.Interactor.Name()
-	}
 	if s.buttonsWaitingForRedraw != nil {
 		selfButtons = s.buttonsWaitingForRedraw
 	}
 
-	spew.Dump(name, selfButtons)
-
 	if s.Layout != nil {
 		layoutButtons := s.Layout.ButtonsWaitingForRedraw()
-		spew.Dump("layout", layoutButtons)
 
 		selfButtons = append(selfButtons, layoutButtons...)
 	}
