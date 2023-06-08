@@ -1,34 +1,60 @@
 package OS
 
 import (
+	log "github.com/sirupsen/logrus"
+	"godeck/src/core/OS/config"
 	"godeck/src/core/connector"
 )
 
 type ProdeckOS struct {
 	connector connector.FrameworkConnector
 
-	brightness int
+	serial        string
+	screenManager *ScreenManager
 }
 
-func mapval(x int, in_min int, in_max int, out_min int, out_max int) int {
-	return (x-in_min)*(out_max-out_min)/(in_max-in_min) + out_min
+func (p *ProdeckOS) ButtonLongPressed(button int) {
+
+}
+
+func (p *ProdeckOS) SleepEntered() {
+
+}
+
+func (p *ProdeckOS) SleepExited() {
+
 }
 
 func (p *ProdeckOS) ButtonDown(button int) {
-	newBrightness := mapval(button, 0, 32, 0, 100)
-	p.connector.SetBrightness(newBrightness)
+	p.screenManager.screen.ButtonPressed(button)
 }
 
-func StartOS(connector connector.FrameworkConnector) connector.OSConnector {
+func (p *ProdeckOS) ButtonUp(button int) {
+
+}
+
+func initOS(connector connector.FrameworkConnector) *ProdeckOS {
+	serial := connector.GetSerialNumber()
+	log.WithFields(log.Fields{
+		"serial": serial,
+	}).Println("Init OS")
+
+	config := config.NewConfig()
+	deviceConfig := config.GetDeviceConfig(serial)
+	_ = deviceConfig
 	proos := ProdeckOS{
 		connector: connector,
-
-		brightness: 1,
+		serial:    serial,
 	}
+	proos.createScreenManager(connector.GetHeight(), connector.GetWidth(), deviceConfig.Brightness)
 
-	println("Starting OS")
-
-	connector.SetBrightness(proos.brightness)
+	connector.SetBrightness(proos.screenManager.brightness)
 
 	return &proos
+}
+
+func StartOS(connector connector.FrameworkConnector) *ProdeckOS {
+	proos := initOS(connector)
+
+	return proos
 }

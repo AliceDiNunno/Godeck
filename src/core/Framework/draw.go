@@ -113,7 +113,7 @@ func (p *ProdeckFramework) outlineCurrentButton(key int) {
 			}
 		}
 
-		p.SetButtonImage(key, basicImage, false)
+		p.setButtonImage(key, basicImage, false)
 	}
 }
 
@@ -129,7 +129,7 @@ func (p *ProdeckFramework) SetButtonColor(button int, color color.Color) {
 		}
 	}
 
-	p.SetButtonImage(button, basicImage, true)
+	p.setButtonImage(button, basicImage, true)
 }
 
 func (p *ProdeckFramework) SetButtonJpeg(button int, fileName string) {
@@ -146,12 +146,12 @@ func (p *ProdeckFramework) SetButtonJpeg(button int, fileName string) {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
 	} else {
-		p.SetButtonImage(button, imageToRGBA(image), true)
+		p.setButtonImage(button, imageToRGBA(image), true)
 	}
 
 }
 
-func (p *ProdeckFramework) SetButtonImage(button int, image *image.RGBA, cache bool) {
+func (p *ProdeckFramework) setButtonImage(button int, image *image.RGBA, cache bool) {
 	if cache {
 		p.imageCache.images[button] = image
 	}

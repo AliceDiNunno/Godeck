@@ -8,6 +8,7 @@ import (
 	"godeck/src/core/connector"
 	deviceDomain "godeck/src/domain/device"
 	"image"
+	"image/color"
 )
 
 type ButtonImageCache struct {
@@ -31,7 +32,7 @@ type ProdeckFramework struct {
 
 func (p *ProdeckFramework) initializeButtons() {
 	for i := 0; i < 32; i++ {
-		p.SetButtonColor(i, randomColor())
+		p.SetButtonColor(i, color.Black)
 	}
 }
 

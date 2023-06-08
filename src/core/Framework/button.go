@@ -36,7 +36,10 @@ func (p *ProdeckFramework) setupButtonEvent() {
 func (p *ProdeckFramework) buttonPressedUp(button int) {
 	image, ok := p.imageCache.images[button]
 	if ok {
-		p.SetButtonImage(button, image, false)
+		p.setButtonImage(button, image, false)
+	}
+	if p.currentOS != nil {
+		(*p.currentOS).ButtonUp(button)
 	}
 }
 

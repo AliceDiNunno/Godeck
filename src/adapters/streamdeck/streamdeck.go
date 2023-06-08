@@ -14,6 +14,8 @@ type StreamDeck struct {
 	Serial     string
 	Brightness int
 	HID        *hid.Device
+	Height     int
+	Width      int
 }
 
 func NewStreamDeck(device device.DeckDevice, serial string, instance *hid.Device) *StreamDeck {
@@ -22,6 +24,9 @@ func NewStreamDeck(device device.DeckDevice, serial string, instance *hid.Device
 		Serial:     serial,
 		Brightness: -1,
 		HID:        instance,
+
+		Height: 4,
+		Width:  8,
 	}
 }
 
