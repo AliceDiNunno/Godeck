@@ -12,6 +12,7 @@ func (p *ProdeckFramework) setupSleepEvent() {
 
 		p.isSleeping = true
 		go p.setBrightness(0, true, false)
+		(*p.currentOS).SleepEntered()
 
 		p.eventHub.CancelPublishLater(eventDomain.DeviceWillSleepEvent)
 	})
@@ -19,13 +20,14 @@ func (p *ProdeckFramework) setupSleepEvent() {
 
 func (p *ProdeckFramework) prepareForSleep() {
 	log.Println("Device will sleep in 5 minutes")
-	p.eventHub.PublishLater(eventDomain.DeviceWillSleepEvent, nil, 5*time.Minute)
+	p.eventHub.PublishLater(eventDomain.DeviceWillSleepEvent, nil, 10*time.Second)
 }
 
 func (p *ProdeckFramework) wakeUpFromSleep() bool {
 	if p.isSleeping {
 		p.isSleeping = false
 		go p.setBrightness(p.currentBrightness, true, false)
+		(*p.currentOS).SleepExited()
 		return true
 	}
 

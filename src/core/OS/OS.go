@@ -11,14 +11,18 @@ type ProdeckOS struct {
 
 	serial        string
 	screenManager *ScreenManager
+
+	buttonsState map[int]bool
 }
 
 func (p *ProdeckOS) ButtonLongPressed(button int) {
-
+	p.buttonsState[button] = false
+	log.Println("Button long pressed")
 }
 
 func (p *ProdeckOS) SleepEntered() {
-
+	println("lock screen")
+	p.screenManager.lockScreen.isLocked = true
 }
 
 func (p *ProdeckOS) SleepExited() {
@@ -26,11 +30,12 @@ func (p *ProdeckOS) SleepExited() {
 }
 
 func (p *ProdeckOS) ButtonDown(button int) {
-	p.screenManager.screen.ButtonPressed(button)
+	p.buttonsState[button] = true
+	p.screenManager.ButtonPressed(button)
 }
 
 func (p *ProdeckOS) ButtonUp(button int) {
-
+	p.buttonsState[button] = false
 }
 
 func initOS(connector connector.FrameworkConnector) *ProdeckOS {
@@ -39,13 +44,19 @@ func initOS(connector connector.FrameworkConnector) *ProdeckOS {
 		"serial": serial,
 	}).Println("Init OS")
 
-	config := config.NewConfig()
-	deviceConfig := config.GetDeviceConfig(serial)
+	cfg := config.NewConfig()
+	deviceConfig := cfg.GetDeviceConfig(serial)
 	_ = deviceConfig
 	proos := ProdeckOS{
-		connector: connector,
-		serial:    serial,
+		connector:    connector,
+		serial:       serial,
+		buttonsState: map[int]bool{},
 	}
+
+	for i := 0; i < connector.GetHeight()*connector.GetWidth(); i++ {
+		proos.buttonsState[i] = false
+	}
+
 	proos.createScreenManager(connector.GetHeight(), connector.GetWidth(), deviceConfig.Brightness)
 
 	connector.SetBrightness(proos.screenManager.brightness)

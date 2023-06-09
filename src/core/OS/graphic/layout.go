@@ -110,21 +110,11 @@ func (l *Layout) GetEntryColor(x int, y int) color.Color {
 		if x >= entryOrigin.X && x < entryOrigin.X+entryWidth {
 			if y >= entryOrigin.Y && y < entryOrigin.Y+entryHeight {
 				if entry.screen.Interactor != nil {
-					return entry.screen.Interactor.GetButtonColor(entry.screen, x-entryOrigin.X, y-entryOrigin.Y)
-				} else {
-					return color.RGBA{
-						R: 0,
-						G: 0,
-						B: 255,
-						A: 0,
-					}
+					return entry.screen.GetEntryColor(x-entryOrigin.X, y-entryOrigin.Y)
 				}
-				return color.Black
-				//return entry.screen.GetPixel(x-entryOrigin.x, y-entryOrigin.y)
 			}
 		}
 	}
-
 	return color.Black
 }
 

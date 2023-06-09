@@ -81,3 +81,18 @@ func (s *Screen) ButtonsWaitingForRedraw() []Point {
 func (s *Screen) SetLayout(layout *Layout) {
 	s.Layout = layout
 }
+
+func (s *Screen) GetEntryColor(x int, y int) color.Color {
+	if s.Layout != nil {
+		return s.Layout.GetEntryColor(x, y)
+	}
+
+	//remove from the list of buttons waiting for redraw
+	for i, point := range s.buttonsWaitingForRedraw {
+		if point.X == x && point.Y == y {
+			s.buttonsWaitingForRedraw = append(s.buttonsWaitingForRedraw[:i], s.buttonsWaitingForRedraw[i+1:]...)
+			break
+		}
+	}
+	return s.Interactor.GetButtonColor(s, x, y)
+}

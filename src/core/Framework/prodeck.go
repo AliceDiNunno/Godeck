@@ -15,13 +15,18 @@ type ButtonImageCache struct {
 	images map[int]*image.RGBA
 }
 
+type ButtonPressedTime struct {
+	buttons map[int]int64
+}
+
 type ProdeckFramework struct {
 	eventHub *hub.Hub
 
 	currentDevice *streamdeck.StreamDeck
 	currentOS     *connector.OSConnector
 
-	imageCache ButtonImageCache
+	imageCache  ButtonImageCache
+	pressedTime ButtonPressedTime
 
 	lastInteractionTime int64
 	isSleeping          bool
@@ -65,6 +70,9 @@ func NewProdeckFramework(eventHub *hub.Hub, builder func() connector.OSConnector
 		eventHub: eventHub,
 		imageCache: ButtonImageCache{
 			images: make(map[int]*image.RGBA),
+		},
+		pressedTime: ButtonPressedTime{
+			buttons: make(map[int]int64),
 		},
 		currentOS: nil,
 		osBuilder: builder,
